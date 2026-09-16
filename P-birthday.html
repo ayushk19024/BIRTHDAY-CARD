@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Birthday Magic Studio — Ayush Kumar</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,system-ui,Arial,sans-serif}
+body{overflow:hidden;color:#fff;background:#090014}
+body:before{content:"";position:fixed;inset:-50%;background:
+radial-gradient(circle at 20% 20%,#ff2f92 0 8%,transparent 28%),
+radial-gradient(circle at 80% 30%,#6c38ff 0 8%,transparent 30%),
+radial-gradient(circle at 50% 90%,#00c2ff 0 6%,transparent 27%);
+filter:blur(30px);animation:bg 15s ease-in-out infinite alternate}
+@keyframes bg{to{transform:translate(5%,3%) scale(1.08)}}
+.screen{position:fixed;inset:0;display:grid;place-items:center;padding:18px;transition:.7s;z-index:2}
+.hidden{opacity:0;pointer-events:none;transform:scale(.94)}
+.panel{width:min(500px,96vw);max-height:92vh;overflow:auto;padding:28px;border:1px solid #ffffff35;
+background:#ffffff12;backdrop-filter:blur(22px);border-radius:30px;box-shadow:0 25px 100px #0008}
+h1{font-size:clamp(30px,8vw,48px);margin:5px 0 10px}h2{margin:5px 0 16px}
+p{color:#ffe9f6;line-height:1.55}
+.btn{border:0;border-radius:999px;padding:12px 19px;margin:5px;font-weight:800;cursor:pointer;
+background:linear-gradient(90deg,#ffd166,#ff8fab);color:#410025;box-shadow:0 8px 25px #0004}
+.btn.alt{background:#ffffff18;color:#fff;border:1px solid #ffffff35}
+input,textarea,select{width:100%;padding:12px;margin:5px 0;border:1px solid #ffffff25;border-radius:13px;
+background:#160b2b;color:#fff;outline:none}textarea{resize:vertical;min-height:85px}
+label.file{display:block;text-align:center;padding:12px;border-radius:13px;background:#ffffff12;border:1px dashed #ffffff55;margin:7px 0;cursor:pointer}
+input[type=file]{display:none}.small{font-size:12px;opacity:.75}
+.gift{width:155px;height:125px;position:relative;margin:28px auto;cursor:pointer;animation:bob 1.5s infinite}
+@keyframes bob{50%{transform:translateY(-12px) rotate(2deg)}}
+.gbody{position:absolute;left:12px;right:12px;bottom:0;height:78px;background:#ff3d82;border-radius:9px}
+.glid{position:absolute;left:0;right:0;top:29px;height:30px;background:#ff78a9;border-radius:8px;z-index:2}
+.rv{position:absolute;left:67px;top:29px;width:22px;height:96px;background:#ffd166;z-index:3}.rh{position:absolute;left:0;right:0;top:57px;height:14px;background:#ffd166;z-index:3}
+.bow:before,.bow:after{content:"";position:absolute;top:3px;width:48px;height:32px;background:#ffd166;border-radius:50%;z-index:4}
+.bow:before{left:35px;transform:rotate(30deg)}.bow:after{right:35px;transform:rotate(-30deg)}
+#studio{align-items:center;overflow:auto}.layout{display:flex;gap:18px;align-items:center;justify-content:center;flex-wrap:wrap}
+.tools{width:min(330px,94vw);max-height:90vh;overflow:auto}.preview{width:min(430px,92vw)}
+.card{position:relative;width:100%;min-height:600px;padding:28px 22px;overflow:hidden;text-align:center;
+border-radius:32px;background:linear-gradient(145deg,#fff5fa,#ffd7e8 50%,#ffc1d9);color:#7a164d;
+border:6px solid #ffffffaa;box-shadow:0 25px 90px #0008}
+.card:before{content:"";position:absolute;inset:11px;border:2px dashed #ff4f91aa;border-radius:25px}
+.card>*{position:relative;z-index:1}.card h2{font-size:40px;margin:20px 0 4px}
+.card .name{font-size:32px;font-weight:900;margin:9px}.photo{width:145px;height:145px;border-radius:50%;object-fit:cover;
+border:7px solid white;box-shadow:0 8px 25px #7a164d30;background:#ffd2e3}.msg{min-height:75px;font-size:17px;line-height:1.55;padding:0 12px}
+.cake{font-size:70px;animation:cake 1.4s infinite}@keyframes cake{50%{transform:translateY(-6px)}}
+.dev{margin-top:14px;font-size:10px;opacity:.62;letter-spacing:.2px}
+.float{position:fixed;z-index:5;pointer-events:none;animation:rise linear forwards}
+@keyframes rise{to{transform:translateY(-115vh) rotate(20deg);opacity:0}}
+.spark{position:fixed;z-index:6;pointer-events:none;animation:spark 1s forwards}@keyframes spark{to{opacity:0;transform:translateY(-50px) scale(.2)}}
+.musicbar{padding:10px;border-radius:15px;background:#00000018;margin:8px 0;font-size:13px}
+.range{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:10px 16px;background:#111d;border-radius:999px;opacity:0;transition:.3s;z-index:99}
+#toast.show{opacity:1}
+@media(max-width:850px){body{overflow:auto}.screen{position:absolute}.tools{max-height:none}}
+</style>
+</head>
+<body>
+
+<div id="welcome" class="screen">
+ <div class="panel" style="text-align:center">
+  <div style="font-size:55px">🎂✨🎈</div>
+  <h1>Birthday Magic</h1>
+  <p>A premium interactive birthday card made with HTML, CSS & JavaScript.</p>
+  <div class="gift" onclick="goSetup()"><div class="bow"></div><div class="glid"></div><div class="gbody"></div><div class="rv"></div><div class="rh"></div></div>
+  <button class="btn" onclick="goSetup()">🎁 Open Birthday Surprise</button>
+  <p class="small">Step 1 • Open → Step 2 • Personalize → Step 3 • Celebrate</p>
+ </div>
+</div>
+
+<div id="setup" class="screen hidden">
+ <div class="panel">
+  <h2>🎨 Personalize Your Card</h2>
+  <input id="name" value="Special One" placeholder="Birthday person's name">
+  <textarea id="message">Wishing you a beautiful day filled with happiness, smiles and unforgettable moments! 💖</textarea>
+  <label class="file">📸 Choose Birthday Photo<input id="photoFile" type="file" accept="image/*"></label>
+  <label class="file">🎵 Add Your Own Music (MP3/WAV/OGG)<input id="musicFile" type="file" accept="audio/*"></label>
+  <div class="musicbar" id="musicInfo">No custom music selected.</div>
+  <div class="range">Music volume <input id="volume" type="range" min="0" max="1" step=".05" value=".55"></div>
+  <select id="theme">
+   <option value="pink">Pink Dream 💗</option><option value="purple">Royal Purple 💜</option>
+   <option value="blue">Sky Celebration 💙</option><option value="gold">Golden Party 💛</option>
+  </select>
+  <div style="text-align:center;margin-top:8px">
+   <button class="btn" onclick="createCard()">💌 Create Card</button>
+   <button class="btn alt" onclick="document.getElementById('welcome').classList.remove('hidden');document.getElementById('setup').classList.add('hidden')">↩ Back</button>
+  </div>
+  <p class="small">Music stays on your device/browser. It is not uploaded anywhere by this file.</p>
+ </div>
+</div>
+
+<div id="studio" class="screen hidden">
+ <div class="layout">
+  <div class="tools panel">
+   <h2>✨ Card Studio</h2>
+   <input id="editName" placeholder="Name">
+   <textarea id="editMsg" placeholder="Message"></textarea>
+   <label class="file">📸 Change Photo<input id="editPhoto" type="file" accept="image/*"></label>
+   <label class="file">🎵 Change Music<input id="editMusic" type="file" accept="audio/*"></label>
+   <div class="musicbar"><button class="btn" onclick="toggleMusic()" id="musicBtn">▶ Play Music</button>
+    <span id="musicLabel">No music</span></div>
+   <div class="range">Volume <input id="vol2" type="range" min="0" max="1" step=".05" value=".55"></div>
+   <button class="btn" onclick="downloadPNG()">📥 Download Card PNG</button>
+   <button class="btn" onclick="shareCard()">📤 Share Card</button>
+   <button class="btn alt" onclick="startAgain()">🔄 New Card</button>
+   <p class="small">Developer: AYUSH KUMAR • BCA(AI) Student at JNCU<br>GitHub: ayushk19024 • Discord: ethicalayush_50552</p>
+  </div>
+
+  <div class="preview">
+   <div id="card" class="card">
+    <div style="font-size:32px">🎈 ✨ 🎈</div>
+    <h2>Happy Birthday</h2><div class="cake">🎂</div>
+    <img id="cardPhoto" class="photo" alt="Birthday photo">
+    <div id="cardName" class="name">Special One</div>
+    <div id="cardMsg" class="msg"></div>
+    <div style="font-size:30px;margin:12px">💖 🎁 💖</div>
+    <div style="font-weight:800">Have an amazing birthday! ✨</div>
+    <div class="dev">Created with ❤️ by AYUSH KUMAR</div>
+   </div>
+  </div>
+ </div>
+</div>
+<div id="toast"></div>
+<audio id="audio"></audio>
+
+<script>
+let photoData="", musicURL="", audio=document.getElementById("audio"), playing=false;
+
+function $(id){return document.getElementById(id)}
+function toast(t){$("toast").textContent=t;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2200)}
+function transition(a,b){$(a).classList.add("hidden");setTimeout(()=>$(b).classList.remove("hidden"),250)}
+function goSetup(){burst();transition("welcome","setup")}
+
+$("photoFile").onchange=e=>readImage(e.target.files[0],d=>{photoData=d;toast("Photo added 📸")});
+$("musicFile").onchange=e=>setMusic(e.target.files[0]);
+$("editPhoto").onchange=e=>readImage(e.target.files[0],d=>{$("cardPhoto").src=d;toast("Photo updated")});
+$("editMusic").onchange=e=>setMusic(e.target.files[0]);
+
+function readImage(file,cb){if(!file)return;let r=new FileReader();r.onload=()=>cb(r.result);r.readAsDataURL(file)}
+function setMusic(file){
+ if(!file)return; if(musicURL)URL.revokeObjectURL(musicURL);
+ musicURL=URL.createObjectURL(file);audio.src=musicURL;audio.load();
+ $("musicInfo").textContent="🎵 "+file.name;$("musicLabel").textContent=file.name;
+ toast("Music added 🎵");
+}
+$("volume").oninput=e=>audio.volume=e.target.value;
+$("vol2").oninput=e=>audio.volume=e.target.value;
+
+function createCard(){
+ $("editName").value=$("name").value.trim()||"Special One";
+ $("editMsg").value=$("message").value.trim()||"Wishing you a wonderful birthday! 💖";
+ $("cardName").textContent=$("editName").value;
+ $("cardMsg").textContent="";
+ $("cardPhoto").src=photoData||placeholder();
+ applyTheme($("theme").value);
+ transition("setup","studio");typeMessage($("editMsg").value);effects();
+}
+$("editName").oninput=e=>$("cardName").textContent=e.target.value||"Special One";
+$("editMsg").oninput=e=>$("cardMsg").textContent=e.target.value;
+
+function typeMessage(t){$("cardMsg").textContent="";let i=0;let x=setInterval(()=>{ $("cardMsg").textContent=t.slice(0,++i);if(i>=t.length)clearInterval(x)},35)}
+function placeholder(){let c=document.createElement("canvas");c.width=c.height=300;let x=c.getContext("2d");x.fillStyle="#ffd1e3";x.fillRect(0,0,300,300);x.font="100px Arial";x.textAlign="center";x.fillText("🎂",150,185);return c.toDataURL()}
+function applyTheme(t){
+ const c=$("card");
+ c.style.background=t==="purple"?"linear-gradient(145deg,#f6edff,#dec7ff,#c7a7ff)":t==="blue"?"linear-gradient(145deg,#effbff,#c9efff,#9ddcff)":t==="gold"?"linear-gradient(145deg,#fff8df,#ffe29a,#ffc85c)":"linear-gradient(145deg,#fff5fa,#ffd7e8,#ffc1d9)";
+}
+function effects(){for(let i=0;i<25;i++)setTimeout(makeFloat,i*180);for(let i=0;i<35;i++)setTimeout(makeSpark,i*70)}
+function burst(){for(let i=0;i<30;i++)setTimeout(makeSpark,i*30)}
+function makeFloat(){
+ let x=document.createElement("div");x.className="float";x.textContent=["🎈","💖","💕","🎈"][Math.floor(Math.random()*4)];
+ x.style.left=Math.random()*100+"vw";x.style.bottom="-60px";x.style.fontSize=(25+Math.random()*35)+"px";
+ x.style.animationDuration=(5+Math.random()*5)+"s";document.body.appendChild(x);setTimeout(()=>x.remove(),11000)
+}
+function makeSpark(){
+ let x=document.createElement("div");x.className="spark";x.textContent=["✨","✦","⭐"][Math.floor(Math.random()*3)];
+ x.style.left=Math.random()*100+"vw";x.style.top=Math.random()*100+"vh";document.body.appendChild(x);setTimeout(()=>x.remove(),1100)
+}
+function toggleMusic(){
+ if(!musicURL){toast("First choose your music 🎵");return}
+ if(playing){audio.pause();playing=false;$("musicBtn").textContent="▶ Play Music"}
+ else{audio.volume=$("vol2").value;audio.play();playing=true;$("musicBtn").textContent="⏸ Pause Music"}
+}
+audio.onended=()=>{playing=false;$("musicBtn").textContent="▶ Play Music"};
+
+async function downloadPNG(){
+ toast("Preparing PNG…");
+ const canvas=await html2canvas($("card"),{scale:2,useCORS:true,backgroundColor:null});
+ let a=document.createElement("a");a.download="birthday-card.png";a.href=canvas.toDataURL("image/png");a.click();
+}
+async function shareCard(){
+ const canvas=await html2canvas($("card"),{scale:2,useCORS:true});
+ canvas.toBlob(async blob=>{
+  const file=new File([blob],"birthday-card.png",{type:"image/png"});
+  if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
+   try{await navigator.share({title:"Birthday Card 🎂",text:"A birthday surprise 💖",files:[file]})}catch(e){}
+  }else toast("Image sharing isn't supported here. Download the PNG instead.");
+ })
+}
+function startAgain(){
+ audio.pause();playing=false;transition("studio","welcome")
+}
+</script>
+</body>
+</html>
